@@ -35,8 +35,20 @@
                                         <td><?= session()->get('username') ?></td>
                                             <td> {{ $okei->umur}}</td>
                                             <td> {{ $okei->alamat}}</td>
-                                            <td> {{ $okei->cv}}</td>
-                                            <td> {{ $okei->surat}}</td>
+                                            <td>
+    @if ($okei->cv)
+        <a href="{{ asset('uploads/' . $okei->cv) }}" target="_blank">View CV</a>
+    @else
+        No CV uploaded
+    @endif
+</td>
+<td>
+    @if ($okei->surat)
+        <a href="{{ asset('uploads/' . $okei->surat) }}" target="_blank">View Surat</a>
+    @else
+        No Surat uploaded
+    @endif
+</td>
 
                                             <td>
                                                 <!-- Edit button -->

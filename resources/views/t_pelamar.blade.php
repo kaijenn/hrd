@@ -7,16 +7,15 @@
                 </div>
                 <div class="card-body">
                     <!-- Form Utama -->
-                    <form method="POST" action="<?= asset('home/aksi_t_pelamar') ?>" id="modalForm" enctype="multipart/form-data">
-    <div id="form-container">
-        <!-- Form Tambah Modal 1 (Form Pertama) -->
+                    <form action="{{ url('home/aksi_t_pelamar') }}" method="POST">
+    @csrf <!-- Menambahkan CSRF Token -->
         <div class="modal-form">
             <div class="row">
-            <div class="col-md-7 mb-3">
-    <label for="nama_pelamar">Nama Pelamar:</label>
-    <input type="text" class="form-control" name="nama_pelamar" value="<?= session()->get('username') ?>" readonly>
-</div>
-<input type="hidden" class="form-control" name="id_pelamar" value="<?= session()->get('id') ?>" readonly>
+                <div class="col-md-7 mb-3">
+                    <label for="nama_pelamar">Nama Pelamar:</label>
+                    <input type="text" class="form-control" name="nama_pelamar" value="<?= session()->get('username') ?>" readonly>
+                </div>
+                <input type="hidden" class="form-control" name="id_pelamar" value="<?= session()->get('id') ?>" readonly>
                 <div class="col-md-7 mb-3">
                     <label for="nomor_surat">Umur:</label>
                     <input type="text" class="form-control" name="umur" placeholder="Masukkan Umur Anda" required>
@@ -35,7 +34,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <div class="form-group row">
         <div class="col-sm-12">
             <button type="submit" class="btn btn-info">Save</button>

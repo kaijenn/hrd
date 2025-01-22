@@ -375,38 +375,53 @@ public function t_pelamar()
     }
 }
 
-public function aksi_t_pelamar(Request $request) // Accepting Request as a parameter
+public function aksi_t_pelamar(Request $request)
 {
-    // Validate input
+    // Validate input, including the file uploads
     $request->validate([
         'umur' => 'required|string|max:255',
         'alamat' => 'required|string|max:255',
+        'cv' => 'nullable|file|mimes:pdf,docx,txt|max:2048', // Validate CV file (optional, with size and type restrictions)
+        'surat' => 'nullable|file|mimes:pdf,docx,txt|max:2048', // Validate Surat file (optional, with size and type restrictions)
     ]);
 
     // Get input values using the passed Request instance
     $id_pelamar = $request->input('id_pelamar');
-    $umur = $request->input('umur'); // Get 'namakelas' input
+    $umur = $request->input('umur');
     $alamat = $request->input('alamat');
-    $cv = $request->input('cv');
-    $surat = $request->input('surat');
+    
+    // Handle CV upload
+    if ($request->hasFile('cv') && $request->file('cv')->isValid()) {
+        $cvFile = $request->file('cv');
+        $cv = $cvFile->getRandomName();  // Generate a random file name
+        $cvFile->move(public_path('uploads'), $cv);  // Move the file to the 'uploads' directory
+    }
 
-    // Prepare the data for insertion
+    // Handle Surat upload
+    if ($request->hasFile('surat') && $request->file('surat')->isValid()) {
+        $suratFile = $request->file('surat');
+        $surat = $suratFile->getRandomName();  // Generate a random file name
+        $suratFile->move(public_path('uploads'), $surat);  // Move the file to the 'uploads' directory
+    }
+
+    // Prepare the data for insertion (including file names)
     $data = [
         'id_user' => $id_pelamar,
         'umur' => $umur,
         'alamat' => $alamat,
-        'cv' => $cv,
-        'surat' => $surat,
-        'status' => 'Pending',
-    ];
+        'cv' => isset($cv) ? $cv : null,  // Ensure the cv and surat fields exist even if not uploaded
+    'surat' => isset($surat) ? $surat : null,
+];
 
-    // Create a new instance of M_projek and insert the data
+    // Create a new instance of M_projek and insert the data into the 'pelamar' table
     $model = new M_projek();
-    $model->tambah('pelamar', $data); // Use your method to add the data
+    $model->tambah('pelamar', $data);  // Insert the data into the 'pelamar' table
 
-    // Redirect to the kelas page with a success message
-    return redirect()->to('home/pelamar')->with('success', 'Kelas berhasil ditambahkan!');
+    // Redirect to the pelamar page with a success message
+    print_r($data);
+    // return redirect()->to('home/pelamar')->with('success', 'Pelamar berhasil ditambahkan!');
 }
+
 
  public function edit_kelas($id)
     {
