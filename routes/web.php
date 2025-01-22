@@ -23,6 +23,17 @@ Route::middleware(['web'])->group(function () {
     Route::post('home/aksi_login', [HomeController::class, 'aksi_login'])->name('aksi_login'); // Route baru
     Route::get('home/setting', [HomeController::class, 'setting']);
     Route::get('home/pelamar', [HomeController::class, 'pelamar']);
+    // Tambah Pelamar
+
+    Route::get('home/t_pelamar', [HomeController::class, 't_pelamar']);
+    Route::post('home/t_pelamar', [HomeController::class, 't_pelamar'])->name('t_pelamar'); 
+    Route::post('home/aksi_t_pelamar', [HomeController::class, 'aksi_t_pelamar'])->name('aksi_t_pelamar'); 
+    
+    Route::get('home/aksi_t_pelamar', [HomeController::class, 'aksi_t_pelamar']);
+
+// Edit Pelamar
+Route::get('home/e_pelamar/{id}', [HomeController::class, 'editPelamar'])->name('editPelamar');
+
 });
 
 
@@ -33,9 +44,11 @@ Route::get('/ok', [HomeController::class, 'ok']);
 Route::get('/dashboard', [HomeController::class, 'dashboard']);
 Route::get('/login', [HomeController::class, 'login']);
 Route::get('/setting', [HomeController::class, 'setting']);
+Route::get('home/t_pelamar', [HomeController::class, 't_pelamar']);
+Route::post('home/t_pelamar', [HomeController::class, 't_pelamar'])->name('t_pelamar'); 
+Route::post('home/aksi_t_pelamar', [HomeController::class, 'aksi_t_pelamar'])->name('aksi_t_pelamar'); 
 
-
-
+Route::get('home/aksi_t_pelamar', [HomeController::class, 'aksi_t_pelamar']);
 Route::get('/kelas', [HomeController::class, 'kelas'])->name('kelas');
 
 

@@ -20,28 +20,30 @@
                                 <thead>
                                     <tr>
                                         <th>NO</th>
-                                        <th>Nama Kelas</th>
-                                        <th>Nama Siswa</th>
-                                        <th>Email Siswa</th>
-                                        <th>No Hp Siswa</th>
-                                        <th>Email Ortu</th>
-                                        <th>No Hp Ortu</th>
+                                        <th>Nama Pelamar</th>
+                                        <th>Umur</th>
+                                        <th>Alamat</th>
+                                        <th>CV</th>
+                                        <th>Surat</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tableBody">
-                                        $no = 1;
                                         @foreach ($data as $okei)
                                         <tr>
-                                            <td><?= $no++ ?></td>
-                                            <td> {{ $okei->tgl_lahir}}</td>
+                                        <td>{{ $loop->iteration }}</td> <!-- Nomor urut -->
+                                        <td><?= session()->get('username') ?></td>
+                                            <td> {{ $okei->umur}}</td>
+                                            <td> {{ $okei->alamat}}</td>
+                                            <td> {{ $okei->cv}}</td>
+                                            <td> {{ $okei->surat}}</td>
 
                                             <td>
                                                 <!-- Edit button -->
-                                                <button class="btn btn-info" onclick="loadEditPelamarForm(<?= $okei->id_siswa ?>)">
+                                                <button class="btn btn-info" onclick="loadEditPelamarForm(<?= $okei->id_pelamar ?>)">
                                                     <i class="fe fe-edit"></i> Edit
                                                 </button>
-                                                <button class="btn btn-secondary btn-delete" data-id="<?= $okei->id_siswa ?>">Delete</button>
+                                                <button class="btn btn-secondary btn-delete" data-id="<?= $okei->id_pelamar ?>">Delete</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -61,7 +63,7 @@
     // Function to load "Tambah Jurusan" form dynamically
     function loadTambahPelamarForm() {
         // Fetch and load the form for adding a new jurusan
-        fetch('<?= asset('home/t_siswa') ?>')
+        fetch('<?= url('home/t_pelamar') ?>')
             .then(response => response.text()) // Convert response to HTML
             .then(data => {
                 // Hide the entire section
@@ -73,21 +75,21 @@
                 // Add a back button
                 let backButton = `
                     <button class="btn btn-secondary" onclick="backToPelamarList()">
-                        <i class="fe fe-arrow-left"></i> Back to Siswa List
+                        <i class="fe fe-arrow-left"></i> Back to Pelamar List
                     </button>
                 `;
                 document.getElementById('dynamicContent').insertAdjacentHTML('beforeend', backButton);
             })
             .catch(error => {
                 console.error('Error:', error); // Log any errors
-                alert('Terjadi kesalahan saat memuat form tambah siswa.');
+                alert('Terjadi kesalahan saat memuat form tambah pelamar.');
             });
     }
 
     // Function to load "Edit Jurusan" form dynamically
-    function loadEditPelamarForm(id_siswa) {
+    function loadEditPelamarForm(id_pelamar) {
         // Fetch and load the edit form for the siswa
-        fetch('<?= asset('home/e_siswa') ?>/' + id_siswa) // Endpoint for editing jurusan
+        fetch('<?= asset('home/e_pelamar') ?>/' + id_pelamar) // Endpoint for editing jurusan
             .then(response => response.text()) // Convert response to HTML
             .then(data => {
                 // Hide the entire section
@@ -99,7 +101,7 @@
                 // Add a back button
                 let backButton = `
                     <button class="btn btn-secondary" onclick="backToPelamarList()">
-                        <i class="fe fe-arrow-left"></i> Back to Siswa List
+                        <i class="fe fe-arrow-left"></i> Back to Pelamar List
                     </button>
                 `;
                 document.getElementById('dynamicContent').insertAdjacentHTML('beforeend', backButton);

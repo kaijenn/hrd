@@ -97,7 +97,7 @@ class HomeController extends BaseController
     if ($user) {
         session()->put([
             'username' => $user->username, 
-            'id_user' => $user->id_user, 
+            'id' => $user->id_user, 
             'id_level' => $user->id_level, 
         ]);
         // dd(session()->all()); // Debug session
@@ -325,30 +325,89 @@ public function generateCaptcha()
 
 
 
-        public function pelamar()
+public function pelamar()
 {
-
+    // Periksa apakah pengguna telah login
     if (session()->get('id') > 0) {
-    $model = new M_projek;
+        $model = new M_projek;
 
-    // Get the current user's ID from the session
-    $data['data'] = M_projek::tampil('pelamar');
+        // Ambil ID pengguna dari sesi
+        $userId = session()->get('id');
 
+        // Ambil data pelamar untuk pengguna yang sedang login
+        $wherePelamar = ['id_user' => $userId];
+        $data['data'] = $model->tampilWhere('pelamar', $wherePelamar);
 
-    
-    $where = ['id_setting' => 1]; 
-    $data['yogi'] = $model->getWhere2('setting', $where); 
+        // Ambil data tambahan (misalnya setting)
+        $whereSetting = ['id_setting' => 1];
+        $data['yogi'] = $model->getWhere2('setting', $whereSetting);
 
-    // Pass data to the view
-    echo view('header', $data);
-    echo view('menu', $data);
-    echo view('pelamar', $data);
-    echo view('footer');
-
-} else {
-    return redirect()->to('home/login');
+        // Tampilkan data ke view
+        echo view('header', $data);
+        echo view('menu', $data);
+        echo view('pelamar', $data);
+        echo view('footer');
+    } else {
+        // Jika tidak login, arahkan ke halaman login
+        return redirect()->to('home/login');
+    }
 }
+
+
+public function t_pelamar()
+{
+    // Periksa apakah pengguna telah login
+    if (session()->get('id') > 0) {
+        $model = new M_projek;
+
+        // Ambil data tambahan (misalnya setting)
+        $whereSetting = ['id_setting' => 1];
+        $data['yogi'] = $model->getWhere2('setting', $whereSetting);
+
+        // Tampilkan data ke view
+        echo view('header', $data);
+        echo view('menu', $data);
+        echo view('t_pelamar');
+        echo view('footer');
+    } else {
+        // Jika tidak login, arahkan ke halaman login
+        return redirect()->to('home/login');
+    }
 }
+
+public function aksi_t_pelamar(Request $request) // Accepting Request as a parameter
+{
+    // Validate input
+    $request->validate([
+        'umur' => 'required|string|max:255',
+        'alamat' => 'required|string|max:255',
+    ]);
+
+    // Get input values using the passed Request instance
+    $id_pelamar = $request->input('id_pelamar');
+    $umur = $request->input('umur'); // Get 'namakelas' input
+    $alamat = $request->input('alamat');
+    $cv = $request->input('cv');
+    $surat = $request->input('surat');
+
+    // Prepare the data for insertion
+    $data = [
+        'id_user' => $id_pelamar,
+        'umur' => $umur,
+        'alamat' => $alamat,
+        'cv' => $cv,
+        'surat' => $surat,
+        'status' => 'Pending',
+    ];
+
+    // Create a new instance of M_projek and insert the data
+    $model = new M_projek();
+    $model->tambah('pelamar', $data); // Use your method to add the data
+
+    // Redirect to the kelas page with a success message
+    return redirect()->to('home/pelamar')->with('success', 'Kelas berhasil ditambahkan!');
+}
+
  public function edit_kelas($id)
     {
 
